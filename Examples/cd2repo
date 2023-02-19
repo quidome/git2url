@@ -1,4 +1,5 @@
 cd2repo() {
+    local workspace url cmd localPath
     workspace="$HOME/Workspace"
 
     # Perform some basic check before continuing
