@@ -1,0 +1,32 @@
+cd2repo() {
+    workspace="$HOME/Workspace"
+
+    # Perform some basic check before continuing
+    for cmd in git git2url ; do
+      if ! command -v $cmd >/dev/null 2>&1; then
+        echo Cannot find $cmd
+        return 1
+      fi
+    done
+
+    if [ $# -ne 1 ] ; then
+      echo Usage:
+      echo "\t$(basename $0) <git url>"
+      return 1
+    fi
+
+    url=$1
+    if ! localPath="$workspace/$(git2url $url)"; then
+      echo Unexpected exit code from git2url, stopping
+      return 1
+    fi
+
+    # Check if localPath exists
+    if [ ! -e $localPath ]; then
+      echo cloning $url to $localPath
+      git clone "$url" "$localPath" || return 1
+    fi
+
+    # Change dir to localPath
+    cd $localPath
+}
